@@ -21,7 +21,7 @@ public class GenerateSerialNumberTests {
     @Test
     public void examinationGetKeyIndentity() {
         var examination = initExamination();
-        var serialNumber = examination.generateSerialNumber();
+        var serialNumber = examination.generateSerialNumber(examination);
 
         assertThat(examination).isNotNull();
         assertThat(serialNumber).isGreaterThan(10000);
@@ -31,7 +31,7 @@ public class GenerateSerialNumberTests {
     @Test
     public void examinationGetKeyIndentity_next() {
         var examination = initExamination();
-        var serialNumber = examination.generateSerialNumber();
+        var serialNumber = examination.generateSerialNumber(examination);
 
         assertThat(examination).isNotNull();
         assertThat(serialNumber).isLessThan(20000);

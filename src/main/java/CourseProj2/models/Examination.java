@@ -21,22 +21,21 @@ public class Examination {
     private String exam;
 
 
-    public String generateId() {
+
+    public static String generateId() {
         return UUID.randomUUID().toString();
     }
-
-    public String gerenateKeyIndentityExamination() {
-        return exam + '-' + generateSerialNumber();
+    public static String gerenateKeyIndentityExamination(Examination item) {
+        return  item.getExam() + '-' + item.getSerialNumber();
     }
-
-    public int generateSerialNumber(){
-        if (serialNumber == 0) {
+    public static int generateSerialNumber(Examination item){
+        if (item.getSerialNumber() == 0) {
             int min = 10000, max = 20000;
 
             return (int) (Math.random() * (max-min) + min);
 
         } else {
-            return serialNumber;
+            return item.getSerialNumber();
         }
     }
 }

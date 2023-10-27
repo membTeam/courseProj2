@@ -18,9 +18,9 @@ public class PersistenceConfig {
             var item = (Examination) event.getEntity();
 
             if (item.getId() == null) {
-                item.setId(item.generateId());
-                item.setSerialNumber(item.generateSerialNumber());
-                item.setKeyIndentityExamination(item.gerenateKeyIndentityExamination());
+                item.setId(Examination.generateId());
+                item.setSerialNumber(Examination.generateSerialNumber(item));
+                item.setKeyIndentityExamination(Examination.gerenateKeyIndentityExamination(item));
             }
 
         };
