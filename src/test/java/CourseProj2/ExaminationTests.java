@@ -3,7 +3,6 @@ package CourseProj2;
 import CourseProj2.models.Examination;
 import CourseProj2.repository.ExaminationRepository;
 import CourseProj2.service.EExam;
-import CourseProj2.service.ResponsModelList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +48,12 @@ public class ExaminationTests {
 
         var saveExamination = examinationRepository.save(examination);
 
-        assertThat(saveExamination.getId()).isNotBlank();
+        assertThat(saveExamination.generateId()).isNotBlank();
         assertThat(saveExamination.getExam()).isEqualTo(saveExamination.getExam());
         assertThat(saveExamination.getQuestion()).isEqualTo(saveExamination.getQuestion());
         assertThat(saveExamination.getAnswer()).isEqualTo(saveExamination.getAnswer());
 
-        assertThat(saveExamination).isEqualTo(examinationRepository.findById(saveExamination.getId()).get());
+        assertThat(saveExamination).isEqualTo(examinationRepository.findById(saveExamination.generateId()).get());
     }
 
 

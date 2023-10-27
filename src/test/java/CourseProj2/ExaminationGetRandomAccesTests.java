@@ -20,7 +20,7 @@ public class ExaminationGetRandomAccesTests {
 
         examination2 = examinationRepository.getRandomExamination("java");
 
-        assertThat(examination1.getId()).isNotEqualTo(examination2.getId());
+        assertThat(examination1.generateId()).isNotEqualTo(examination2.generateId());
     }
 
 }

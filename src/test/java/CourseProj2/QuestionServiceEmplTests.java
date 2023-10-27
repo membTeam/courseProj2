@@ -26,7 +26,7 @@ public class QuestionServiceEmplTests {
         var resSave = questionServiceEmpl.add("AnyQuestion", "AnyAnswer", "java");
         assertThat(resSave).isNotNull();
 
-        var id = resSave.getId();
+        var id = resSave.generateId();
         var findExamination = examinationRepository.findById(id).get();
 
         assertThat(findExamination).isNotNull();
@@ -42,7 +42,7 @@ public class QuestionServiceEmplTests {
         var resSave = questionServiceEmpl.add(examination);
         assertThat(resSave).isNotNull();
 
-        var id = resSave.getId();
+        var id = resSave.generateId();
         var findExamination = examinationRepository.findById(id).get();
 
         assertThat(findExamination).isNotNull();
@@ -54,7 +54,7 @@ public class QuestionServiceEmplTests {
 
         var resDelete = questionServiceEmpl.remove(firstExamination);
 
-        var findExamination = examinationRepository.findById(resDelete.getId());
+        var findExamination = examinationRepository.findById(resDelete.generateId());
 
         assertThat(findExamination.isEmpty()).isTrue();
 
@@ -80,7 +80,7 @@ public class QuestionServiceEmplTests {
 
         var examination2 = questionServiceEmpl.getRandomExamination("java");
 
-        assertThat(examination1.getId()).isNotEqualTo(examination2.getId());
+        assertThat(examination1.generateId()).isNotEqualTo(examination2.generateId());
 
     }
 
