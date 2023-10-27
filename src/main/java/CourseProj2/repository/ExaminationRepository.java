@@ -14,7 +14,7 @@ public interface ExaminationRepository extends CrudRepository<Examination, Strin
     @Query("select * from examination e where e.exam = :exam")
     Collection<Examination> findAllByExam(@Param("exam") String exam);
 
-    @Query("select id, question, answer from examination e where e.exam = :exam limit :amount")
+    @Query("select * from examination e where e.exam = :exam limit :amount")
     Collection<Examination> findAllByExam(@Param("exam") String  exam,
                                      @Param("amount") int amount);
 

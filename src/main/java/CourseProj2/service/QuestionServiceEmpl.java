@@ -2,23 +2,22 @@ package CourseProj2.service;
 
 import CourseProj2.models.Examination;
 import CourseProj2.repository.ExaminationRepository;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 
-@Component
 public class QuestionServiceEmpl implements QuestionService {
 
-    private ExaminationRepository examinationRepository;
+    private ExaminationRepository repo;
 
-    public QuestionServiceEmpl(ExaminationRepository examinationRepository){
-        this.examinationRepository = examinationRepository;
+    public QuestionServiceEmpl(ExaminationLoadDataServ examinationLoadDataServ){
+        examinationLoadDataServ.loadDataIntoRepository();
+        this.repo = examinationLoadDataServ.getExaminationRepository();
     }
 
     @Override
     public int amount(String exam) {
-        return examinationRepository.countByExam(exam);
+        return repo.countByExam(exam);
     }
 
     @Override
@@ -33,33 +32,38 @@ public class QuestionServiceEmpl implements QuestionService {
 
     @Override
     public Examination add(Examination examination) {
-        return  examinationRepository.save(examination);
+        return  repo.save(examination);
     }
 
     @Override
     public Examination remove(Examination examination) {
-        examinationRepository.delete(examination);
+        repo.delete(examination);
         return examination;
     }
 
     @Override
     public Collection<Examination> getAll(String exam, int amount) {
-        return examinationRepository.findAllByExam(exam, amount);
+        var result = repo.findAllByExam(exam, amount);
+        return result;
     }
 
     @Override
     public Collection<Examination> getAll(String exam) {
-        return examinationRepository.findAllByExam(exam);
+        return repo.findAllByExam(exam);
     }
 
     @Override
     public Examination getRandomExamination(String exam) {
-        return examinationRepository.getRandomExamination(exam);
+        return repo.getRandomExamination(exam);
     }
 
     @Override
     public Examination findExamination(String id) {
-        var resFind = examinationRepository.findById(id);
+        var resFind = repo.findById(id);
         return resFind.isEmpty() ? null : resFind.get();
+    }
+
+    public Integer getAllAmount(String exam){
+        return repo.countByExam(exam);
     }
 }
