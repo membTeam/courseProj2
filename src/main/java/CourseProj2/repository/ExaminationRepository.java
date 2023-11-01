@@ -1,16 +1,18 @@
 package CourseProj2.repository;
 
 import CourseProj2.models.Examination;
-import CourseProj2.service.EExam;
-import CourseProj2.service.ResponsModel;
 import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface ExaminationRepository extends CrudRepository<Examination, String> {
+
+   @Query("select exists(select * from examination where UPPER(trim(question)) = UPPER(trim(:question))) res ")
+   boolean existsExaminationQuestion(@Param("question") String question);
+
     @Query("select * from examination e where e.exam = :exam")
     Collection<Examination> findAllByExam(@Param("exam") String exam);
 

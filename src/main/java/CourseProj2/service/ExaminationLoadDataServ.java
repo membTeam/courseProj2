@@ -1,75 +1,72 @@
 package CourseProj2.service;
 
+import CourseProj2.exeption.ErrLoadDataIntoRepositoryException;
+import CourseProj2.exeption.ErrReadFromFileException;
 import CourseProj2.models.Examination;
 import CourseProj2.repository.ExaminationRepository;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 @Configuration
-@NoArgsConstructor
-public class ExaminationLoadDataServ {
+public class ExaminationLoadDataServ implements CommandLineRunner {
     @Autowired
     private ExaminationRepository repo;
 
-    @Bean
     public ExaminationRepository getExaminationRepository() {
         return repo;
     }
 
-    private Examination initExamination(){
+    private static Examination initExamination(){
         return Examination.builder()
                 .id(null)
                 .build();
     }
 
-    @Bean
-    public void loadDataIntoRepository() {
-        final var path = "data/data.txt";
-        final var strPattern = "--exam\\s*(\\w+)" +
-                "\\s*--question\\s*([^\\w]+)" +
-                "\\s*--answer([^\\w]+)";
-        final var pattern = Pattern.compile(strPattern);
+    @Override
+    public void run(String... args) {
+        try {
+            final var path = "data/data.txt";
+            final var strPattern = "--exam\\s*(\\w+)" +
+                    "\\s*--question\\s*(.+)" +
+                    "\\s*--answer(.+)";
+            final var pattern = Pattern.compile(strPattern);
 
-        try (Scanner scanner = new Scanner(new File(path))) {
-            repo.deleteAll();
+            try (Scanner scanner = new Scanner(new File(path))) {
+                repo.deleteAll();
 
-            while (scanner.hasNextLine()) {
-                var strLine = scanner.nextLine();
-                var matcher = pattern.matcher(strLine);
+                while (scanner.hasNextLine()) {
+                    var strLine = scanner.nextLine();
+                    var matcher = pattern.matcher(strLine);
 
-                var examination = initExamination();
-                if (matcher.find()) {
-                    var exam = matcher.group(1);
-                    var question = matcher.group(2);
-                    var answer = matcher.group(3);
+                    var examination = initExamination();
+                    if (matcher.find()) {
+                        var exam = matcher.group(1).trim();
+                        var question = matcher.group(2).trim();
+                        var answer = matcher.group(3).trim();
 
-                    examination.setExam(exam);
-                    examination.setQuestion(question);
-                    examination.setAnswer(answer);
+                        examination.setExam(exam);
+                        examination.setQuestion(question);
+                        examination.setAnswer(answer);
 
-                    repo.save(examination);
+                        repo.save(examination);
 
-                } else {
-                    //TODO: вставить исключение : ошибка считывания файла данных
-                    System.out.println("not find");
+                    } else {
+                        System.out.println("err: Ошибка считывания строки");
+                        throw new ErrReadFromFileException("no find item");
+                    }
                 }
             }
 
             System.out.println("загружено " + repo.count() + " записей");
 
         } catch (Exception ex) {
-            //TODO: использовать RunitemException
             System.out.println("err: " + ex.getMessage());
+            throw new ErrLoadDataIntoRepositoryException("Нет начальных данных в БД");
         }
-
     }
-
 }

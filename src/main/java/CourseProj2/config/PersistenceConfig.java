@@ -13,16 +13,15 @@ public class PersistenceConfig {
      * @return
      */
     @Bean
-    public ApplicationListener<BeforeSaveEvent> idGenerator() {
+    public ApplicationListener<BeforeSaveEvent> idGenerator(){
         return event -> {
-            var item = (Examination) event.getEntity();
-
-            if (item.getId() == null) {
-                item.setId(Examination.generateId());
-                item.setSerialNumber(Examination.generateSerialNumber(item));
-                item.setKeyIndentityExamination(Examination.gerenateKeyIndentityExamination(item));
+            var entity = event.getEntity();
+            if (entity instanceof Examination) {
+                var examination = (Examination) entity;
+                if (examination.getId() == null) {
+                    examination.setId(Examination.generateId());
+                }
             }
-
         };
     }
 }

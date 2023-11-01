@@ -1,12 +1,12 @@
 package CourseProj2.testAnyData;
 
-import CourseProj2.models.Examination;
 import CourseProj2.repository.ExaminationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import CourseProj2.models.Examination;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -27,13 +27,15 @@ public class VerifyLoadData_intoRepositoryTests {
 
     private final String path = "data/data.txt";
     private final String strPattern = "--exam\\s*(\\w+)" +
-            "\\s*--question\\s*([^\\w]+)" +
-            "\\s*--answer([^\\w]+)";
+            "\\s*--question\\s*(.+)" +
+            "\\s*--answer(.+)";
 
     private final Pattern pattern = Pattern.compile(strPattern);
 
     @Test
     public void loadData_fromFile_dataTXT() {
+        repo.deleteAll();
+
         int num = 0;
 
         try (Scanner scanner = new Scanner(new File(path))) {

@@ -3,7 +3,7 @@ package CourseProj2;
 
 import CourseProj2.models.Examination;
 import CourseProj2.repository.ExaminationRepository;
-import CourseProj2.service.QuestionServiceEmpl;
+import CourseProj2.service.ExaminationControllerServiceEmpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,20 +13,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 // TODO: Этот класс вместо ExaminationTests который надо удалить
 
 @SpringBootTest
-public class QuestionServiceEmplTests {
+public class ExaminationControllerServiceEmplTests {
 
     @Autowired
     private ExaminationRepository examinationRepository;
     @Autowired
-    private QuestionServiceEmpl questionServiceEmpl;
+    private ExaminationControllerServiceEmpl questionServiceEmpl;
 
     @Test
     public void canSaveByStringData() {
 
-        var resSave = questionServiceEmpl.add("AnyQuestion", "AnyAnswer", "java");
+        var emploee = Examination.builder().question("AnyQuestion").answer("AnyAnswer").exam("java").build();
+
+        var resSave = questionServiceEmpl.add(emploee);
         assertThat(resSave).isNotNull();
 
-        var id = resSave.generateId();
+        var id = resSave.getId();
         var findExamination = examinationRepository.findById(id).get();
 
         assertThat(findExamination).isNotNull();
@@ -35,14 +37,14 @@ public class QuestionServiceEmplTests {
     @Test
     public void canSaveByExamination() {
         var examination = Examination.builder()
-                .question("anyQuestion")
-                .answer("someSnswer")
+                .question("anyQuestion2")
+                .answer("someSnswer2")
                 .exam("java").build();
 
         var resSave = questionServiceEmpl.add(examination);
         assertThat(resSave).isNotNull();
 
-        var id = resSave.generateId();
+        var id = resSave.getId();
         var findExamination = examinationRepository.findById(id).get();
 
         assertThat(findExamination).isNotNull();
@@ -52,11 +54,9 @@ public class QuestionServiceEmplTests {
     public void canRemoveExamination() {
         var firstExamination = examinationRepository.firstExamination("java");
 
-        var resDelete = questionServiceEmpl.remove(firstExamination);
+        var resDelete = questionServiceEmpl.remove(firstExamination.getId());
 
-        var findExamination = examinationRepository.findById(resDelete.generateId());
-
-        assertThat(findExamination.isEmpty()).isTrue();
+        assertThat(resDelete).isEqualTo("remove examination");
 
     }
 
@@ -68,10 +68,10 @@ public class QuestionServiceEmplTests {
 
     @Test
     public void canGetFullDataTest() {
-        var examination1 = questionServiceEmpl.getAll("java");
-        var amount = examinationRepository.findAllByExam("java");
+        var amount = questionServiceEmpl.getAll("java").size();
+        var count = examinationRepository.findAllByExam("java").size();
 
-        assertThat(examination1.size()).isEqualTo(amount);
+        assertThat(amount).isEqualTo(count);
     }
 
     @Test
