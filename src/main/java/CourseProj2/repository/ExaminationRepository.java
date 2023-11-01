@@ -24,6 +24,9 @@ public interface ExaminationRepository extends CrudRepository<Examination, Strin
     @Query("select * from examination where exam = :exam order by random() limit 1")
     Examination getRandomExamination(@Param("exam") String exam );
 
+    @Query("select * from examination where exam = :exam order by random() limit :amount")
+    Collection<Examination> getRandomExamination(@Param("exam") String exam, @Param("amount") int amount);
+
     @Query("select * from examination where exam = :exam limit 1")
     Examination firstExamination(@Param("exam") String exam);
 

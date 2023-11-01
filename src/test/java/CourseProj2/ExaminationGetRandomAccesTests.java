@@ -23,4 +23,13 @@ public class ExaminationGetRandomAccesTests {
         assertThat(examination1.generateId()).isNotEqualTo(examination2.generateId());
     }
 
+    @Test
+    public void canGetRandomAmountExamination() {
+        var count = examinationRepository.countByExam("java");
+        var examination = examinationRepository.getRandomExamination("java", count + 1);
+
+        assertThat(examination.size()).isEqualTo(count);
+    }
+
+
 }

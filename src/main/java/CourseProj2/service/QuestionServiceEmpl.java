@@ -10,10 +10,14 @@ public class QuestionServiceEmpl implements QuestionService {
 
     private ExaminationRepository repo;
 
-    public QuestionServiceEmpl(ExaminationLoadDataServ examinationLoadDataServ){
+    public void fillData(){
+
+    }
+
+    /*public QuestionServiceEmpl(ExaminationLoadDataServ examinationLoadDataServ){
         examinationLoadDataServ.loadDataIntoRepository();
         this.repo = examinationLoadDataServ.getExaminationRepository();
-    }
+    }*/
 
     @Override
     public int amount(String exam) {
@@ -43,8 +47,7 @@ public class QuestionServiceEmpl implements QuestionService {
 
     @Override
     public Collection<Examination> getAll(String exam, int amount) {
-        var result = repo.findAllByExam(exam, amount);
-        return result;
+        return repo.findAllByExam(exam, amount);
     }
 
     @Override
