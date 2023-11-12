@@ -8,10 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Component
-public class ExaminationControllerServiceEmpl implements ExaminationControllerService {
+public class ExaminationControllerServiceImpl implements ExaminationControllerService {
+
+    private static Set<String> hashSetExam = List.of("java", "math")
+            .stream().collect(Collectors.toSet());
+
+    private static void isExistsExam(String exam) {
+        if (!hashSetExam.contains(exam)) {
+            throw new ErrRequestException("Нет данных по " + exam);
+        }
+    }
 
     @Autowired
     private ExaminationRepository repo;
@@ -20,16 +32,7 @@ public class ExaminationControllerServiceEmpl implements ExaminationControllerSe
     public Examination getExaminationById(String id) {
         var examination = repo.findById(id);
 
-        if (examination.isEmpty()) {
-            throw new ErrRequestException("Нет данных");
-        }
-
-        return examination.get();
-    }
-
-    @Override
-    public int amount(String exam) {
-        return repo.countByExam(exam);
+        return examination.orElseThrow( () -> { throw  new ErrRequestException("Нет данных"); } );
     }
 
     @Override
@@ -38,25 +41,23 @@ public class ExaminationControllerServiceEmpl implements ExaminationControllerSe
             throw new ErrItemIsExistsExeption("Повторный ввод вопроса");
         }
 
-        repo.save(examination);
-
-        return examination;
+        return repo.save(examination);
     }
 
     @Override
     public String remove(String id) {
 
-        var examination = repo.findById(id);
-        if (examination.isEmpty()) {
-            throw new ErrRequestException("Нет данных");
-        }
+        var examination = repo.findById(id)
+                .orElseThrow(()-> {throw new ErrRequestException("Нет данных");});
 
-        repo.delete(examination.get());
+        repo.delete(examination);
         return "remove examination" ;
     }
 
     @Override
     public Collection<Examination> getAll(String exam, int amount) {
+
+        isExistsExam(exam);
 
         var count = repo.countByExam(exam);
         if (amount > count) {
@@ -68,21 +69,31 @@ public class ExaminationControllerServiceEmpl implements ExaminationControllerSe
 
     @Override
     public Collection<Examination> getAll(String exam) {
+        isExistsExam(exam);
+
         return repo.findAllByExam(exam);
     }
 
     @Override
-    public Examination getRandomExamination(String exam) {
-        return repo.getRandomExamination(exam);
+    public Iterable<Examination> getRandomExamination(String exam, Integer amount) {
+
+        isExistsExam(exam);
+
+        if (repo.countByExam(exam) < amount) {
+            throw new ErrRequestException("Превышен лимит доступного количества");
+        }
+
+        return repo.getRandomExamination(exam, amount);
     }
 
     @Override
     public Examination findExamination(String id) {
-        var resFind = repo.findById(id);
-        return resFind.isEmpty() ? null : resFind.get();
+        repo.findById(id).orElseThrow(()-> {throw new ErrItemIsExistsExeption("Нет данных");}) ;
     }
 
     public Integer getAllAmount(String exam){
+        isExistsExam(exam);
+
         return repo.countByExam(exam);
     }
 }

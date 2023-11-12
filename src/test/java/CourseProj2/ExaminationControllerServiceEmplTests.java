@@ -3,7 +3,7 @@ package CourseProj2;
 
 import CourseProj2.models.Examination;
 import CourseProj2.repository.ExaminationRepository;
-import CourseProj2.service.ExaminationControllerServiceEmpl;
+import CourseProj2.service.ExaminationControllerServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,10 +15,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class ExaminationControllerServiceEmplTests {
 
+    private static String getIdFromIterable(Iterable<Examination> exam) {
+
+        var res = "";
+        for (Examination item : exam) {
+            res = item.getId();
+        }
+
+        return res;
+    }
+
     @Autowired
     private ExaminationRepository examinationRepository;
     @Autowired
-    private ExaminationControllerServiceEmpl questionServiceEmpl;
+    private ExaminationControllerServiceImpl questionServiceEmpl;
 
     @Test
     public void canSaveByStringData() {
@@ -76,12 +86,13 @@ public class ExaminationControllerServiceEmplTests {
 
     @Test
     public void getRandomExaminationTest() {
-        var examination1 = questionServiceEmpl.getRandomExamination("java");
+        var examination1 = questionServiceEmpl.getRandomExamination("java", 1);
+        var id1 = getIdFromIterable(examination1);
 
-        var examination2 = questionServiceEmpl.getRandomExamination("java");
+        var examination2 = questionServiceEmpl.getRandomExamination("java", 1);
+        var id2 = getIdFromIterable(examination2);
 
-        assertThat(examination1.generateId()).isNotEqualTo(examination2.generateId());
-
+        assertThat(id1).isNotEqualTo(id2);
     }
 
 }

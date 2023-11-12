@@ -9,10 +9,10 @@ public interface ExaminationControllerService {
     String remove(String id);
     Collection<Examination> getAll(String exam, int amount);
     Collection<Examination> getAll(String exam);
-    Examination getRandomExamination(String exam);
+    Iterable<Examination> getRandomExamination(String exam, Integer amount);
 
     Examination getExaminationById(String id);
 
-    int amount(String exam);
+    //int amount(String exam);
     Examination findExamination(String id);
 }
