@@ -10,8 +10,11 @@ import java.util.Collection;
 
 public interface ExaminationRepository extends CrudRepository<Examination, String> {
 
-  @Query("select question from examination where e.exam = :exam")
-  Iterable<String> questions(String exam);
+  @Query("select question from examination e where e.exam = :exam")
+  Iterable<String> questions(@Param("exam") String exam);
+
+  @Query("select count(*) from examination e where e.exam = :exam")
+  Integer getCountForExam(@Param("exam") String exam);
 
    @Query("select exists(select * from examination where UPPER(trim(question)) = UPPER(trim(:question))) res ")
    boolean existsExaminationQuestion(@Param("question") String question);

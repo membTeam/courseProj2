@@ -78,6 +78,10 @@ public class ExaminationControllerServImpl implements ExaminationControllerServ 
 
         isExistsExam(exam);
 
+        if (amount == 0) {
+            throw new ErrRequestException("Кол-во д/быть больше нуля");
+        }
+
         if (repo.countByExam(exam) < amount) {
             throw new ErrRequestException("Превышен лимит доступного количества");
         }

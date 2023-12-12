@@ -30,7 +30,7 @@ public class ExaminationControllerTests {
     ExaminationRepository repo;
 
     @Test
-    public void testMethod_amount() throws Exception{
+    public void addWithParamJava() throws Exception{
 
         var examination = Examination.builder()
                 .exam("java")
@@ -49,9 +49,37 @@ public class ExaminationControllerTests {
     }
 
     @Test
-    public void getAll_test() throws Exception{
+    public void addWithParamMath() throws Exception{
 
-        examinationLoadDataServ.run();
+        var examination = Examination.builder()
+                .exam("math")
+                .answer("My answer")
+                .question("Simple question")
+                .build();
+
+        mvc.perform(post("/exam/java/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtil.toJson(examination))
+                )
+                .andExpect( status().isOk())
+                .andExpect( MockMvcResultMatchers
+                        .jsonPath("$.answer").value("My answer"))
+                .andDo(print());
+    }
+
+    @Test
+    public void removeItem() throws Exception{
+        var id = repo.firstExamination("java").getId();
+
+        var url = "/exam/remove/" + id;
+        mvc.perform(get(url))
+                .andExpect( MockMvcResultMatchers.status().isOk())
+                .andExpect( MockMvcResultMatchers
+                        .content().string("remove examination"));
+    }
+
+    @Test
+    public void getAllForAmount() throws Exception{
 
         mvc.perform(get("/exam/get/java/2"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -62,13 +90,34 @@ public class ExaminationControllerTests {
     }
 
     @Test
-    public void removeItem() throws Exception{
+    public void getAll() throws Exception{
+
+        String count = String.valueOf(repo.getCountForExam("java"));
+
+        mvc.perform(get("/exam/java/"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect( MockMvcResultMatchers.content().string(count));
+    }
+
+    @Test
+    public void getExaminationById() throws Exception {
         var id = repo.firstExamination("java").getId();
 
-        var url = "/exam/remove/" + id;
+        var url = "/exam/get/"+id;
         mvc.perform(get(url))
-                .andExpect( MockMvcResultMatchers.status().isOk())
-                .andExpect( MockMvcResultMatchers.content().string("remove examination"));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect( MockMvcResultMatchers.content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect( MockMvcResultMatchers
+                        .jsonPath("$.id").value(id));
+    }
+
+    @Test
+    public void getRandExamAmount() throws Exception {
+        mvc.perform(get("/exam/get-rand/java/2"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(  MockMvcResultMatchers
+                        .jsonPath("$.length()").value(2));
     }
 
 }

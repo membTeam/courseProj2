@@ -2,18 +2,19 @@ package CourseProj2.controller;
 
 import CourseProj2.models.Examination;
 import CourseProj2.service.ExaminationControllerServImpl;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
 @RequestMapping(path = "/exam", produces="application/json")
-@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 public class ExaminationController {
     private ExaminationControllerServImpl controllerServ;
+
+    public ExaminationController(ExaminationControllerServImpl controllerServ) {
+        this.controllerServ = controllerServ;
+    }
 
     @PostMapping(path = "/{exam}/add", consumes="application/json")
     public Examination addExamination(@RequestBody Examination examination) {
@@ -26,13 +27,13 @@ public class ExaminationController {
     }
 
     @GetMapping("/get/{exam}/{amount}")
-    public Collection<Examination> getAll(@PathVariable("exam") String exam,
+    public Collection<Examination> getAllForAmount(@PathVariable("exam") String exam,
                                           @PathVariable("amount") Integer amount){
         return controllerServ.getAll(exam, amount);
     }
 
-    @GetMapping("/{exam}/amount")
-    public Integer getAllAmount(@PathVariable("exam") String exam){
+    @GetMapping("/{exam}/")
+    public Integer getAll(@PathVariable("exam") String exam){
         return controllerServ.getAllAmount(exam);
     }
 
@@ -44,10 +45,7 @@ public class ExaminationController {
     @GetMapping("/get-rand/{exam}/{amount}")
     public Iterable<Examination> getRandExamAmount(@PathVariable("exam") String exam,
                                                    @PathVariable("amount") Integer amount ) {
-
-        return amount > 1
-                ? controllerServ.getRandomExamination(exam, --amount)
-                : controllerServ.getRandomExamination(exam, amount);
+        return controllerServ.getRandomExamination(exam, amount);
     }
 
 }
