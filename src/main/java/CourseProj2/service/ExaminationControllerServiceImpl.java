@@ -11,13 +11,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Component
 public class ExaminationControllerServiceImpl implements ExaminationControllerService {
 
-    private static Set<String> hashSetExam = List.of("java", "math")
-            .stream().collect(Collectors.toSet());
+    private static Set<String> hashSetExam =
+            Stream.of("java", "math").collect(Collectors.toSet());
 
     private static void isExistsExam(String exam) {
         if (!hashSetExam.contains(exam)) {
@@ -30,9 +31,7 @@ public class ExaminationControllerServiceImpl implements ExaminationControllerSe
 
     @Override
     public Examination getExaminationById(String id) {
-        var examination = repo.findById(id);
-
-        return examination.orElseThrow( () -> { throw  new ErrRequestException("Нет данных"); } );
+        return  repo.findById(id).orElseThrow(() -> { throw  new ErrRequestException("Нет данных"); });
     }
 
     @Override
@@ -88,7 +87,7 @@ public class ExaminationControllerServiceImpl implements ExaminationControllerSe
 
     @Override
     public Examination findExamination(String id) {
-        repo.findById(id).orElseThrow(()-> {throw new ErrItemIsExistsExeption("Нет данных");}) ;
+        return repo.findById(id).orElseThrow(()-> {throw new ErrItemIsExistsExeption("Нет данных");}) ;
     }
 
     public Integer getAllAmount(String exam){
