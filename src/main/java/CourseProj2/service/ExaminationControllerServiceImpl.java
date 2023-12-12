@@ -1,6 +1,6 @@
 package CourseProj2.service;
 
-import CourseProj2.exeption.ErrItemIsExistsExeption;
+import CourseProj2.exeption.ErrItemIsNotExistsExeption;
 import CourseProj2.exeption.ErrRequestException;
 import CourseProj2.models.Examination;
 import CourseProj2.repository.ExaminationRepository;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,7 +36,7 @@ public class ExaminationControllerServiceImpl implements ExaminationControllerSe
     @Override
     public Examination add(Examination examination) {
         if (repo.existsExaminationQuestion(examination.getQuestion())) {
-            throw new ErrItemIsExistsExeption("Повторный ввод вопроса");
+            throw new ErrItemIsNotExistsExeption("Повторный ввод вопроса");
         }
 
         return repo.save(examination);
@@ -87,7 +86,7 @@ public class ExaminationControllerServiceImpl implements ExaminationControllerSe
 
     @Override
     public Examination findExamination(String id) {
-        return repo.findById(id).orElseThrow(()-> {throw new ErrItemIsExistsExeption("Нет данных");}) ;
+        return repo.findById(id).orElseThrow(()-> {throw new ErrItemIsNotExistsExeption("Нет данных");}) ;
     }
 
     public Integer getAllAmount(String exam){

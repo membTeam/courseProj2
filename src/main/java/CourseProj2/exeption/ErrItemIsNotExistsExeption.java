@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
-public class ErrItemIsExistsExeption extends RuntimeException {
-    public ErrItemIsExistsExeption(String err) {
+public class ErrItemIsNotExistsExeption extends RuntimeException {
+    public ErrItemIsNotExistsExeption(String err) {
         super(err);
     }
 }

@@ -18,10 +18,12 @@ public class PersistenceConfig {
     public ApplicationListener<BeforeSaveEvent> idGenerator(){
         return event -> {
             var entity = event.getEntity();
+
             if (entity instanceof Examination) {
                 var examination = (Examination) entity;
                 if (examination.getId() == null) {
-                    examination.setId(ConfigurationId.generateId());
+                    var id =  UUID.randomUUID().toString();
+                    examination.setId(id);
                 }
             }
         };
