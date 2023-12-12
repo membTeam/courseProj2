@@ -6,7 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ExaminationLoadDataConfig implements CommandLineRunner {
+public class ExaminationLoadDataConfig extends LoadDataFromFile implements CommandLineRunner {
     private ExaminationRepository repo;
     private LoadDataFromFile loadDataFromFile;
 
