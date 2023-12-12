@@ -4,7 +4,7 @@ import CourseProj2.models.Examination;
 
 import java.util.Collection;
 
-public interface ExaminationControllerService {
+public interface ExaminationControllerServ {
     Examination add(Examination examination);
     String remove(String id);
     Collection<Examination> getAll(String exam, int amount);

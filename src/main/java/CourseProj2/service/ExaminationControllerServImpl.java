@@ -4,7 +4,6 @@ import CourseProj2.exeption.ErrItemIsNotExistsExeption;
 import CourseProj2.exeption.ErrRequestException;
 import CourseProj2.models.Examination;
 import CourseProj2.repository.ExaminationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -14,7 +13,12 @@ import java.util.stream.Stream;
 
 
 @Component
-public class ExaminationControllerServiceImpl implements ExaminationControllerService {
+public class ExaminationControllerServImpl implements ExaminationControllerServ {
+    private ExaminationRepository repo;
+
+    public ExaminationControllerServImpl(ExaminationRepository repo) {
+        this.repo = repo;
+    }
 
     private static Set<String> hashSetExam =
             Stream.of("java", "math").collect(Collectors.toSet());
@@ -24,9 +28,6 @@ public class ExaminationControllerServiceImpl implements ExaminationControllerSe
             throw new ErrRequestException("Нет данных по " + exam);
         }
     }
-
-    @Autowired
-    private ExaminationRepository repo;
 
     @Override
     public Examination getExaminationById(String id) {

@@ -1,7 +1,8 @@
 package CourseProj2.controller;
 
 import CourseProj2.models.Examination;
-import CourseProj2.service.ExaminationControllerServiceImpl;
+import CourseProj2.service.ExaminationControllerServImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,10 +10,10 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping(path = "/exam", produces="application/json")
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 public class ExaminationController {
-    @Autowired
-    private ExaminationControllerServiceImpl controllerServ;
+    private ExaminationControllerServImpl controllerServ;
 
     @PostMapping(path = "/{exam}/add", consumes="application/json")
     public Examination addExamination(@RequestBody Examination examination) {
@@ -42,11 +43,12 @@ public class ExaminationController {
 
     @GetMapping("/get-rand/{exam}/{amount}")
     public Iterable<Examination> getRandExamAmount(@PathVariable("exam") String exam,
-                                                  @PathVariable("amount") Integer amount ) {
+                                                   @PathVariable("amount") Integer amount ) {
 
         return amount > 1
-            ? controllerServ.getRandomExamination(exam, --amount)
-            : controllerServ.getRandomExamination(exam, amount);
+                ? controllerServ.getRandomExamination(exam, --amount)
+                : controllerServ.getRandomExamination(exam, amount);
     }
 
 }
+
