@@ -6,11 +6,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ExaminationLoadDataServ implements CommandLineRunner {
+public class ExaminationLoadDataConfig implements CommandLineRunner {
     private ExaminationRepository repo;
     private LoadDataFromFile loadDataFromFile;
 
-    public ExaminationLoadDataServ(ExaminationRepository repo, LoadDataFromFile loadDataFromFile) {
+    public ExaminationLoadDataConfig(ExaminationRepository repo, LoadDataFromFile loadDataFromFile) {
         this.repo = repo;
         this.loadDataFromFile = loadDataFromFile;
     }

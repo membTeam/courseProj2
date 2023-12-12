@@ -17,11 +17,11 @@ import java.util.List;
 public class ExaminationLoadDataServTest {
 
     @Mock
-    LoadDataFromFile loadDataFromFile;
+    LoadDataFromFile dataFromFile;
     @Mock
     ExaminationRepository repo;
     @InjectMocks
-    ExaminationLoadDataServ examinationLoadDataServ;
+    ExaminationLoadDataConfig dataConfig;
 
     @BeforeEach
     private void setUp() {
@@ -42,14 +42,13 @@ public class ExaminationLoadDataServTest {
     @Test
     public void ruh() {
 
-        var examination = new Examination(null, "java",
-                "questin1", "answer1");
+        List<Examination> listExamination = List.of(
+                new Examination(null, "java", "questin1", "answer1"),
+                new Examination(null, "java", "questin2", "answer2")
+        );
 
-        List<Examination> listExamination = List.of(examination);
+        when(dataFromFile.dataFromFile()).thenReturn(listExamination);
 
-        when(loadDataFromFile.dataFromFile()).thenReturn(listExamination);
-        when(repo.save(examination)).thenReturn(examination);
-
-        examinationLoadDataServ.run("");
+        dataConfig.run("");
     }
 }
