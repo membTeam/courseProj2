@@ -2,16 +2,12 @@ package CourseProj2.repository;
 
 import CourseProj2.models.Examination;
 import org.springframework.data.jdbc.repository.query.Query;
-import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 
 public interface ExaminationRepository extends CrudRepository<Examination, String> {
-
-  @Query("select question from examination e where e.exam = :exam")
-  Iterable<String> questions(@Param("exam") String exam);
 
   @Query("select count(*) from examination e where e.exam = :exam")
   Integer getCountForExam(@Param("exam") String exam);

@@ -3,7 +3,6 @@ package CourseProj2.web;
 import CourseProj2.models.Examination;
 import CourseProj2.repository.ExaminationRepository;
 import CourseProj2.service.ExaminationLoadDataConfig;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,11 +27,6 @@ public class ExaminationControllerTests {
 
     @Autowired
     ExaminationRepository repo;
-
-    @BeforeEach
-    private void setUp() {
-
-    }
 
     @Test
     public void addWithParamMath() throws Exception{
