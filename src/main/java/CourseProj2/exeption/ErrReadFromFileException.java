@@ -1,0 +1,11 @@
+package CourseProj2.exeption;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class ErrReadFromFileException extends RuntimeException {
+    public ErrReadFromFileException(String err) {
+        super(err);
+    }
+}
